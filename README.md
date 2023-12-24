@@ -3,15 +3,15 @@
 ![picture](./images/docker.png)
 
 ## Contents
-- [React](#react)
-- [Golang](#golang)
-- [Java Spring Boot](#java-spring-boot)
-- [Java Quarkus](#java-quarkus)
-- [Rust](#rust)
-- [PHP Laravel](#php-laravel)
+- [React](#dockerfile-for-react)
+- [Golang](#dockerfile-for-golang)
+- [Java Spring Boot](#dockerfile-for-java-spring-boot)
+- [Java Quarkus](#dockerfile-for-java-quarkus)
+- [Rust](#dockerfile-for-rust)
+- [PHP Laravel](#dockerfile-for-php-laravel)
 - [Contact](#contact)
 
-## React
+## Dockerfile for React
 Normal:
 
 ```
@@ -116,7 +116,7 @@ http {
 }
 ```
 
-## Golang
+## Dockerfile for Golang
 Normal:
 
 ```
@@ -161,7 +161,7 @@ COPY --from=build /build/run .
 CMD ["/app/run"]
 ```
 
-## Java Spring Boot
+## Dockerfile for Java Spring Boot
 
 ```
 FROM eclipse-temurin:17-jdk-focal as build
@@ -181,7 +181,7 @@ COPY --from=build /build/target/*.jar run.jar
 ENTRYPOINT ["java", "-jar", "/app/run.jar"]
 ```
 
-## Java Quarkus
+## Dockerfile for Java Quarkus
 
 ```
 FROM maven:3.8.4-openjdk-17 AS build
@@ -227,7 +227,7 @@ USER 1001
 ENTRYPOINT [ "/deployments/run-java.sh" ]
 ```
 
-## Rust
+## Dockerfile for Rust
 Normal:
 
 ```
@@ -289,7 +289,7 @@ ENV ROCKET_ADDRESS=0.0.0.0
 CMD ["/bin/server"]
 ```
 
-## PHP Laravel
+## Dockerfile for PHP Laravel
 Normal:
 
 ```
