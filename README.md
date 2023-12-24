@@ -3,7 +3,6 @@
 ![picture](./images/docker.png)
 
 ## Contents
-- [Contents](#contents)
 - [React](#react)
 - [Golang](#golang)
 - [Java Spring Boot](#java-spring-boot)
