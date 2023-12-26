@@ -5,6 +5,7 @@
 ## Contents
 - [React](#dockerfile-for-react)
 - [NodeJS](#dockerfile-for-nodejs)
+- [Python](#dockerfile-for-python)
 - [Golang](#dockerfile-for-golang)
 - [Java Spring Boot](#dockerfile-for-java-spring-boot)
 - [Java Quarkus](#dockerfile-for-java-quarkus)
@@ -157,6 +158,51 @@ COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/dist ./dist
 
 CMD ["node", "dist/main.js"]
+```
+
+## Dockerfile for Python
+Normal:
+```
+FROM python:3.9-slim-bullseye
+
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
+COPY . .
+
+CMD ["python3", "app.py"]
+```
+
+With Flask or Diango, you need to run on host `0.0.0.0`.
+
+Flask:
+```
+FROM python:3.9-slim-bullseye
+
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
+COPY . .
+
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+```
+
+Diango:
+```
+FROM python:3.9-slim-bullseye
+
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
+COPY . .
+
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 ```
 
 ## Dockerfile for Golang
