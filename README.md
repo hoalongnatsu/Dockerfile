@@ -175,7 +175,7 @@ COPY . .
 CMD ["python3", "app.py"]
 ```
 
-With Flask or Diango, you need to run on host `0.0.0.0`.
+With Flask or Django, you need to run on host `0.0.0.0`.
 
 Flask:
 ```
@@ -191,7 +191,7 @@ COPY . .
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
 ```
 
-Diango:
+Django:
 ```
 FROM python:3.9-slim-bullseye
 
