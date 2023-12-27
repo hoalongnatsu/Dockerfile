@@ -9,6 +9,7 @@
 - [Golang](#dockerfile-for-golang)
 - [Java Spring Boot](#dockerfile-for-java-spring-boot)
 - [Java Quarkus](#dockerfile-for-java-quarkus)
+- [ASP.NET Core](#dockerfile-for-aspnet-core)
 - [Rust](#dockerfile-for-rust)
 - [PHP Laravel](#dockerfile-for-php-laravel)
 - [Contact](#contact)
@@ -314,6 +315,53 @@ COPY --from=build /build/target/quarkus-app/quarkus/ /deployments/quarkus/
 USER 1001
 
 ENTRYPOINT [ "/deployments/run-java.sh" ]
+```
+
+## Dockerfile for ASP.NET Core
+Normal:
+```
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+WORKDIR /build
+
+# copy csproj and restore as distinct layers
+COPY *.csproj .
+RUN dotnet restore
+
+# copy and publish app and libraries
+COPY . .
+RUN dotnet publish --no-restore -o app
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+WORKDIR /app
+
+COPY --from=build /build/app .
+
+ENTRYPOINT ["./aspnetapp"]
+```
+
+Alpine version:
+```
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+
+WORKDIR /build
+
+# copy csproj and restore as distinct layers
+COPY *.csproj .
+RUN dotnet restore
+
+# copy and publish app and libraries
+COPY . .
+RUN dotnet publish --no-restore -o app
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+
+WORKDIR /app
+
+COPY --from=build /build/app .
+
+ENTRYPOINT ["./aspnetapp"]
 ```
 
 ## Dockerfile for Rust
