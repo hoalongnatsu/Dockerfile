@@ -10,6 +10,7 @@
 - [Java Spring Boot](#dockerfile-for-java-spring-boot)
 - [Java Quarkus](#dockerfile-for-java-quarkus)
 - [ASP.NET Core](#dockerfile-for-aspnet-core)
+- [Ruby](#dockerfile-for-ruby-on-rails)
 - [Rust](#dockerfile-for-rust)
 - [PHP Laravel](#dockerfile-for-php-laravel)
 - [Contact](#contact)
@@ -362,6 +363,58 @@ WORKDIR /app
 COPY --from=build /build/app .
 
 ENTRYPOINT ["./aspnetapp"]
+```
+## Dockerfile for Ruby on Rails
+Without assets:
+```
+FROM ruby:3.2-slim-bullseye
+
+# Install system dependencies required both at runtime and build time
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    # example system dependencies that need for "gem install pg"
+    libpq-dev
+
+COPY Gemfile Gemfile.lock ./
+
+# Install (excluding development/test dependencies)
+RUN gem install bundler && \
+  bundle config set without "development test" && \
+  bundle install
+
+COPY . .
+
+CMD ["rails", "server", "-b", "0.0.0.0"]
+```
+
+With assets:
+```
+FROM ruby:3.2-slim-bullseye
+
+# Install system dependencies required both at runtime and build time
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    # example system dependencies that need for "gem install pg"
+    libpq-dev \
+    nodejs \
+    yarn
+
+COPY Gemfile Gemfile.lock ./
+
+# Install (excluding development/test dependencies)
+RUN gem install bundler && \
+  bundle config set without "development test" && \
+  bundle install
+
+COPY package.json yarn.lock ./
+RUN yarn install
+
+COPY . .
+
+# Install assets
+RUN RAILS_ENV=production SECRET_KEY_BASE=assets bundle exec rails assets:precompile
+
+CMD ["rails", "server", "-b", "0.0.0.0"]
 ```
 
 ## Dockerfile for Rust
