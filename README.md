@@ -13,6 +13,7 @@
 - [Ruby](#dockerfile-for-ruby-on-rails)
 - [Rust](#dockerfile-for-rust)
 - [PHP Laravel](#dockerfile-for-php-laravel)
+- [Dart](#dockerfile-for-dart)
 - [R Studio](#dockerfile-for-r-studio) 
 - [Contact](#contact)
 
@@ -604,6 +605,26 @@ COPY ./openssl.cnf /etc/ssl/openssl.cnf
 # If you need add extension
 COPY ./php.ini /usr/local/etc/php/php.ini
 ...
+```
+
+## Dockerfile for Dart
+```
+FROM dart AS build
+
+WORKDIR /build
+
+COPY pubspec.* /build
+RUN dart pub get --no-precompile
+
+COPY . .
+RUN dart compile exe app.dart -o run
+
+FROM debian:bullseye-slim
+
+WORKDIR /build
+
+COPY --from=build /build/run /app/run
+CMD ["/app/run"]
 ```
 
 ## Dockerfile for R Studio
