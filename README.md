@@ -136,7 +136,7 @@ COPY . .
 CMD ["node", "index.js"]
 ```
 
-Install with node-gyp on Node Alpine version:
+Install node-gyp on Node Alpine version:
 ```
 FROM node:20-alpine
 
