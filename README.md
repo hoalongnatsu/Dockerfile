@@ -161,6 +161,23 @@ COPY . .
 CMD ["node", "index.js"]
 ```
 
+If you try to use the sharp package with NodeJS but encounter errors:
++ `Could not load the "sharp" module using the linuxmusl-x64 runtime`
++ `sharp: Installation error: Invalid Version: 1.2.4_git20230717`
+
+Fix by changing `FROM node:20-alpine` to `FROM node:20-buster-slim`:
+```
+FROM node:20-buster-slim
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+COPY . .
+
+CMD ["node", "index.js"]
+```
+
 NestJS Framework:
 ```
 FROM node:20-alpine as build
