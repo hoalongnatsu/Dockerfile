@@ -20,7 +20,7 @@
 ## Dockerfile for React
 Normal:
 
-```
+```Dockerfile
 FROM node:20-alpine as build
 
 WORKDIR /app
@@ -38,7 +38,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 With pnpm:
 
-```
+```Dockerfile
 FROM node:20-alpine as build
 
 RUN npm install -g pnpm
@@ -124,7 +124,7 @@ http {
 
 ## Dockerfile for NodeJS
 ExpressJS:
-```
+```Dockerfile
 FROM node:20-alpine
 
 WORKDIR /app
@@ -137,7 +137,7 @@ CMD ["node", "index.js"]
 ```
 
 Install node-gyp on Node Alpine version:
-```
+```Dockerfile
 FROM node:20-alpine
 
 RUN apk add --no-cache \
@@ -166,7 +166,7 @@ If you try to use the sharp package with NodeJS but encounter errors:
 + `sharp: Installation error: Invalid Version: 1.2.4_git20230717`
 
 Fix by changing `FROM node:20-alpine` to `FROM node:20-buster-slim`:
-```
+```Dockerfile
 FROM node:20-buster-slim
 
 WORKDIR /app
@@ -179,7 +179,7 @@ CMD ["node", "index.js"]
 ```
 
 NestJS Framework:
-```
+```Dockerfile
 FROM node:20-alpine as build
 
 WORKDIR /app
@@ -208,7 +208,7 @@ CMD ["node", "dist/main.js"]
 
 ## Dockerfile for Python
 Normal:
-```
+```Dockerfile
 FROM python:3.9-slim-bullseye
 
 WORKDIR /app
@@ -224,7 +224,7 @@ CMD ["python3", "app.py"]
 With Flask or Django, you need to run on host `0.0.0.0`.
 
 Flask:
-```
+```Dockerfile
 FROM python:3.9-slim-bullseye
 
 WORKDIR /app
@@ -238,7 +238,7 @@ CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
 ```
 
 Django:
-```
+```Dockerfile
 FROM python:3.9-slim-bullseye
 
 WORKDIR /app
@@ -251,10 +251,32 @@ COPY . .
 CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 ```
 
+With Poetry, python package management like npm in Node:
++ `pyproject.toml` similar to `package.json` in Node
++ `poetry.lock` similar to `package-lock.json` in Node
+
+```Dockerfile
+FROM python:3.9-slim-bullseye as builder
+RUN pip install poetry
+
+WORKDIR /app
+COPY poetry.lock pyproject.toml ./
+RUN poetry install
+
+FROM python:3.9-slim-bullseye as base
+WORKDIR /app
+
+COPY --from=builder /app /app
+
+ENV PATH="/app/.venv/bin:$PATH"
+CMD ["python", "-m", "app.py"]
+```
+
+
 ## Dockerfile for Golang
 Normal:
 
-```
+```Dockerfile
 FROM golang:1.20-alpine AS build
 
 WORKDIR /build
@@ -274,7 +296,7 @@ CMD ["/app/run"]
 
 With private repo:
 
-```
+```Dockerfile
 FROM golang:1.20-alpine AS build
 
 # Install git and openssh
@@ -298,7 +320,7 @@ CMD ["/app/run"]
 
 ## Dockerfile for Java Spring Boot
 
-```
+```Dockerfile
 FROM eclipse-temurin:17-jdk-focal as build
  
 WORKDIR /build
@@ -318,7 +340,7 @@ ENTRYPOINT ["java", "-jar", "/app/run.jar"]
 
 ## Dockerfile for Java Quarkus
 
-```
+```Dockerfile
 FROM maven:3.8.4-openjdk-17 AS build
 
 WORKDIR /build
@@ -364,7 +386,7 @@ ENTRYPOINT [ "/deployments/run-java.sh" ]
 
 ## Dockerfile for ASP.NET Core
 Normal:
-```
+```Dockerfile
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 WORKDIR /build
@@ -387,7 +409,7 @@ ENTRYPOINT ["./aspnetapp"]
 ```
 
 Alpine version:
-```
+```Dockerfile
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 
 WORKDIR /build
@@ -410,7 +432,7 @@ ENTRYPOINT ["./aspnetapp"]
 ```
 ## Dockerfile for Ruby on Rails
 Without assets:
-```
+```Dockerfile
 FROM ruby:3.2-slim-bullseye
 
 # Install system dependencies required both at runtime and build time
@@ -432,7 +454,7 @@ CMD ["rails", "server", "-b", "0.0.0.0"]
 ```
 
 With assets:
-```
+```Dockerfile
 FROM ruby:3.2-slim-bullseye
 
 # Install system dependencies required both at runtime and build time
@@ -470,7 +492,7 @@ docker build . -t rubyonrails-app --platform=linux/amd64
 ## Dockerfile for Rust
 Normal:
 
-```
+```Dockerfile
 FROM rust:1.70.0-slim-bullseye AS build
 
 # View app name in Cargo.toml
@@ -495,7 +517,7 @@ CMD ["/bin/server"]
 
 With non-privileged user:
 
-```
+```Dockerfile
 FROM rust:1.70.0-slim-bullseye AS build
 
 # View app name in Cargo.toml
@@ -532,7 +554,7 @@ CMD ["/bin/server"]
 ## Dockerfile for PHP Laravel
 Normal:
 
-```
+```Dockerfile
 FROM php:8.2-fpm
 
 ARG user
@@ -650,7 +672,7 @@ COPY ./php.ini /usr/local/etc/php/php.ini
 ```
 
 ## Dockerfile for Dart
-```
+```Dockerfile
 FROM dart AS build
 
 WORKDIR /build
@@ -671,7 +693,7 @@ CMD ["/app/run"]
 
 ## Dockerfile for R Studio
 SQL Server driver:
-```
+```Dockerfile
 FROM rocker/rstudio
 
 RUN apt-get update && apt-get install -y \
@@ -700,7 +722,7 @@ RUN Rscript -e 'install.packages(c("DBI","odbc"))'
 ```
 
 MYSQL driver:
-```
+```Dockerfile
 FROM rocker/rstudio
 
 RUN apt-get update && apt-get install -y \
