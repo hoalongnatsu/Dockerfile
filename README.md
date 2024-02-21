@@ -370,8 +370,6 @@ RUN microdnf install curl ca-certificates wget ${JAVA_PACKAGE} \
   && chown 1001 /deployments/run-java.sh \
   && chmod 540 /deployments/run-java.sh \
   && echo "securerandom.source=file:/dev/urandom" >> /etc/alternatives/jre/conf/security/java.security
-RUN mkdir /javaagent && \
-  wget -O /javaagent/elastic-apm-agent-1.30.0.jar https://search.maven.org/remotecontent?filepath=co/elastic/apm/elastic-apm-agent/1.30.0/elastic-apm-agent-1.30.0.jar
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
 COPY --from=build /build/target/quarkus-app/lib/ /deployments/lib/
