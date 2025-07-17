@@ -1,6 +1,6 @@
 # Dockerfile for many programming languages
 
-![picture](./images/docker.png)
+🚀 Stop writing YAML and boilerplate! This book is your guide to the next evolution of DevOps, teaching you to partner with AI to generate production-ready infrastructure, pipelines, and automation with simple English prompts. Stop being just a builder and become a director of systems, amplifying your expertise and shipping better software, faster: [PromptOps: From YAML to AI](https://leanpub.com/promptops-from-yaml-to-ai).
 
 ## Contents
 - [React](#dockerfile-for-react)
